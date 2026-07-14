@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
   Activity,
+  Bot,
   Building2,
   ChevronLeft,
   ChevronRight,
@@ -21,6 +22,7 @@ const navItems = [
   { to: '/buildings', label: 'Buildings', icon: Building2 },
   { to: '/departments', label: 'Departments', icon: Users },
   { to: '/energy', label: 'Energy Usage', icon: Zap },
+  { to: '/ai', label: 'AI Insights', icon: Bot },
   { to: '/reports', label: 'Reports', icon: FileText },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
