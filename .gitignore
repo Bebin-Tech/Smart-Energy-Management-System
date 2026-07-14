@@ -1,0 +1,29 @@
+# Environment and secrets
+.env
+*.env
+backend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / frontend
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Generated reports
+report_*.pdf
+report_*.xlsx
+report_*.csv

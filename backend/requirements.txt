@@ -1,0 +1,15 @@
+flask
+flask-sqlalchemy
+flask-cors
+flask-login
+flask-jwt-extended
+flask-wtf
+pymysql
+cryptography
+numpy
+pandas
+scikit-learn
+reportlab
+openpyxl
+python-dotenv
+gunicorn
