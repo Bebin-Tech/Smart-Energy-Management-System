@@ -61,7 +61,7 @@ const Layout = ({ onLogout }) => {
           </div>
           <div className={clsx('min-w-0 transition-all duration-200', isCollapsed && 'lg:pointer-events-none lg:w-0 lg:opacity-0')}>
             <h1 className="truncate text-xl font-bold text-slate-950">SmartEnergy</h1>
-            <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500">Management Suite</p>
+            <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500">Management</p>
           </div>
           <button
             type="button"
