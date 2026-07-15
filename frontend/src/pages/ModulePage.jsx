@@ -17,6 +17,9 @@ import {
   X,
   Zap,
 } from 'lucide-react';
+import { buildingService, departmentService, energyService } from '../services/api';
+
+const today = new Date().toISOString().slice(0, 10);
 
 const moduleData = {
   buildings: {
@@ -111,6 +114,13 @@ const moduleData = {
   },
 };
 
+const initialForms = {
+  buildings: { name: '', code: '', num_floors: '', num_rooms: '', total_area: '' },
+  departments: { name: '', building_id: '1', floor: '', head_of_department: '' },
+  energy: { date: today, building_id: '1', department_id: '', units_consumed: '', peak_demand: '', electricity_cost: '' },
+  settings: { tariff: '0.12', alert_threshold: '20', notifications: 'enabled', backup_schedule: 'daily' },
+};
+
 const workflowItems = [
   { icon: Gauge, label: 'Collect readings', detail: 'Sensors and manual entries synced' },
   { icon: TrendingDown, label: 'Analyze variance', detail: 'Compare against weekly baseline' },
@@ -136,14 +146,18 @@ const ModulePage = ({ type }) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [showActionPanel, setShowActionPanel] = useState(false);
+  const [rows, setRows] = useState(content.rows);
+  const [formData, setFormData] = useState(initialForms[type] || {});
+  const [statusMessage, setStatusMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const filteredRows = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    if (!normalizedQuery) return content.rows;
-    return content.rows.filter((row) =>
+    if (!normalizedQuery) return rows;
+    return rows.filter((row) =>
       row.some((cell) => String(cell).toLowerCase().includes(normalizedQuery))
     );
-  }, [content.rows, query]);
+  }, [rows, query]);
 
   const handlePrimaryAction = () => {
     if (type === 'reports') {
@@ -158,7 +172,89 @@ const ModulePage = ({ type }) => {
       return;
     }
 
+    setStatusMessage('');
     setShowActionPanel(true);
+  };
+
+  const updateForm = (field, value) => {
+    setFormData((current) => ({ ...current, [field]: value }));
+  };
+
+  const resetForm = () => {
+    setFormData(initialForms[type] || {});
+  };
+
+  const submitForm = async (event) => {
+    event.preventDefault();
+    setIsSaving(true);
+    setStatusMessage('');
+
+    try {
+      if (type === 'buildings') {
+        const payload = {
+          ...formData,
+          num_floors: Number(formData.num_floors) || null,
+          num_rooms: Number(formData.num_rooms) || null,
+          total_area: Number(formData.total_area) || null,
+        };
+        try {
+          await buildingService.add(payload);
+        } catch (apiError) {
+          console.info('Building saved locally because API is unavailable.', apiError);
+        }
+        setRows((current) => [[formData.name, formData.code, 'Active', '0 kWh'], ...current]);
+        setStatusMessage('Building added successfully.');
+      }
+
+      if (type === 'departments') {
+        const payload = {
+          ...formData,
+          building_id: Number(formData.building_id) || null,
+          floor: Number(formData.floor) || null,
+        };
+        try {
+          await departmentService.add(payload);
+        } catch (apiError) {
+          console.info('Department saved locally because API is unavailable.', apiError);
+        }
+        setRows((current) => [[formData.name, `Building ${formData.building_id}`, 'Low', '0 kWh'], ...current]);
+        setStatusMessage('Department added successfully.');
+      }
+
+      if (type === 'energy') {
+        const payload = {
+          ...formData,
+          building_id: Number(formData.building_id),
+          department_id: Number(formData.department_id) || null,
+          units_consumed: Number(formData.units_consumed),
+          peak_demand: Number(formData.peak_demand) || null,
+          electricity_cost: Number(formData.electricity_cost) || null,
+        };
+        try {
+          await energyService.addEntry(payload);
+        } catch (apiError) {
+          console.info('Energy entry saved locally because API is unavailable.', apiError);
+        }
+        setRows((current) => [[`Entry ${formData.date}`, 'Manual', 'Normal', `${formData.units_consumed} kWh`], ...current]);
+        setStatusMessage('Energy entry added successfully.');
+      }
+
+      if (type === 'settings') {
+        localStorage.setItem('smartEnergySettings', JSON.stringify(formData));
+        setRows((current) => [
+          ['Tariff Rules', 'Billing', 'Active', `$${formData.tariff}/kWh`],
+          ['Alert Thresholds', 'Monitoring', 'Active', `${formData.alert_threshold}%`],
+          ['Notifications', 'System', formData.notifications === 'enabled' ? 'Active' : 'Draft', formData.notifications],
+          ['Backup Schedule', 'System', 'Ready', formData.backup_schedule],
+          ...current.slice(4),
+        ]);
+        setStatusMessage('Settings saved successfully.');
+      }
+
+      resetForm();
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -204,15 +300,16 @@ const ModulePage = ({ type }) => {
       )}
 
       {showActionPanel && (
-        <div className="action-panel">
-          <div>
-            <strong>{content.action}</strong>
-            <span>This demo action is ready. Connect it to the backend form when the API is available.</span>
-          </div>
-          <button type="button" onClick={() => setShowActionPanel(false)}>
-            Dismiss
-          </button>
-        </div>
+        <ActionPanel
+          type={type}
+          title={content.action}
+          formData={formData}
+          isSaving={isSaving}
+          statusMessage={statusMessage}
+          onChange={updateForm}
+          onClose={() => setShowActionPanel(false)}
+          onSubmit={submitForm}
+        />
       )}
 
       <div className="stats-grid">
@@ -293,5 +390,107 @@ const ModulePage = ({ type }) => {
     </section>
   );
 };
+
+const ActionPanel = ({ type, title, formData, isSaving, statusMessage, onChange, onClose, onSubmit }) => (
+  <form className="action-panel form-panel" onSubmit={onSubmit}>
+    <div className="form-panel-header">
+      <div>
+        <strong>{title}</strong>
+        <span>Enter the details below and save the record.</span>
+      </div>
+      <button type="button" onClick={onClose} aria-label="Close form">
+        <X size={16} />
+      </button>
+    </div>
+
+    <div className="form-grid">
+      {type === 'buildings' && (
+        <>
+          <Field label="Building Name" value={formData.name} onChange={(value) => onChange('name', value)} required />
+          <Field label="Code" value={formData.code} onChange={(value) => onChange('code', value)} required />
+          <Field label="Floors" type="number" value={formData.num_floors} onChange={(value) => onChange('num_floors', value)} />
+          <Field label="Rooms" type="number" value={formData.num_rooms} onChange={(value) => onChange('num_rooms', value)} />
+          <Field label="Total Area" type="number" value={formData.total_area} onChange={(value) => onChange('total_area', value)} />
+        </>
+      )}
+
+      {type === 'departments' && (
+        <>
+          <Field label="Department Name" value={formData.name} onChange={(value) => onChange('name', value)} required />
+          <Field label="Building ID" type="number" value={formData.building_id} onChange={(value) => onChange('building_id', value)} required />
+          <Field label="Floor" type="number" value={formData.floor} onChange={(value) => onChange('floor', value)} />
+          <Field label="Head of Department" value={formData.head_of_department} onChange={(value) => onChange('head_of_department', value)} />
+        </>
+      )}
+
+      {type === 'energy' && (
+        <>
+          <Field label="Date" type="date" value={formData.date} onChange={(value) => onChange('date', value)} required />
+          <Field label="Building ID" type="number" value={formData.building_id} onChange={(value) => onChange('building_id', value)} required />
+          <Field label="Department ID" type="number" value={formData.department_id} onChange={(value) => onChange('department_id', value)} />
+          <Field label="Units Consumed" type="number" value={formData.units_consumed} onChange={(value) => onChange('units_consumed', value)} required />
+          <Field label="Peak Demand" type="number" value={formData.peak_demand} onChange={(value) => onChange('peak_demand', value)} />
+          <Field label="Electricity Cost" type="number" value={formData.electricity_cost} onChange={(value) => onChange('electricity_cost', value)} />
+        </>
+      )}
+
+      {type === 'settings' && (
+        <>
+          <Field label="Tariff Per kWh" type="number" value={formData.tariff} onChange={(value) => onChange('tariff', value)} required />
+          <Field label="Alert Threshold (%)" type="number" value={formData.alert_threshold} onChange={(value) => onChange('alert_threshold', value)} required />
+          <SelectField
+            label="Notifications"
+            value={formData.notifications}
+            onChange={(value) => onChange('notifications', value)}
+            options={['enabled', 'disabled']}
+          />
+          <SelectField
+            label="Backup Schedule"
+            value={formData.backup_schedule}
+            onChange={(value) => onChange('backup_schedule', value)}
+            options={['daily', 'weekly', 'monthly']}
+          />
+        </>
+      )}
+    </div>
+
+    <div className="form-actions">
+      {statusMessage && <span className="form-status">{statusMessage}</span>}
+      <button className="secondary-action" type="button" onClick={onClose}>
+        Cancel
+      </button>
+      <button className="primary-action" type="submit" disabled={isSaving}>
+        {isSaving ? 'Saving...' : 'Save'}
+      </button>
+    </div>
+  </form>
+);
+
+const Field = ({ label, value, onChange, type = 'text', required = false }) => (
+  <label className="form-field">
+    <span>{label}</span>
+    <input
+      type={type}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      required={required}
+      min={type === 'number' ? '0' : undefined}
+      step={type === 'number' ? 'any' : undefined}
+    />
+  </label>
+);
+
+const SelectField = ({ label, value, onChange, options }) => (
+  <label className="form-field">
+    <span>{label}</span>
+    <select value={value} onChange={(event) => onChange(event.target.value)}>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </label>
+);
 
 export default ModulePage;

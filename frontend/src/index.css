@@ -31,7 +31,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -191,6 +192,66 @@ button {
   justify-content: space-between;
   border-color: #bfdbfe;
   background: #eff6ff;
+}
+
+.form-panel {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.form-panel-header,
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.form-field {
+  display: grid;
+  gap: 7px;
+}
+
+.form-field span {
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.form-field input,
+.form-field select {
+  height: 42px;
+  width: 100%;
+  border: 1px solid #dbe3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: 0;
+  padding: 0 12px;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-actions {
+  justify-content: flex-end;
+}
+
+.form-status {
+  margin-right: auto;
+  color: #047857;
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
 .action-panel div {
@@ -633,6 +694,20 @@ button {
   .action-panel {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .form-panel {
+    align-items: stretch;
+  }
+
+  .form-panel-header,
+  .form-actions {
+    width: 100%;
+  }
+
+  .form-grid {
+    width: 100%;
+    grid-template-columns: 1fr;
   }
 
   .chart-wrap {

@@ -22,6 +22,11 @@ export const buildingService = {
   add: (data) => api.post('/buildings', data),
 };
 
+export const departmentService = {
+  getAll: () => api.get('/departments'),
+  add: (data) => api.post('/departments', data),
+};
+
 export const energyService = {
   addEntry: (data) => api.post('/energy/entry', data),
   getSummary: () => api.get('/analytics/summary'),
