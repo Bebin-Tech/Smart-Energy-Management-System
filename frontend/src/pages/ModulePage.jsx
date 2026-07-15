@@ -300,16 +300,20 @@ const ModulePage = ({ type }) => {
       )}
 
       {showActionPanel && (
-        <ActionPanel
-          type={type}
-          title={content.action}
-          formData={formData}
-          isSaving={isSaving}
-          statusMessage={statusMessage}
-          onChange={updateForm}
-          onClose={() => setShowActionPanel(false)}
-          onSubmit={submitForm}
-        />
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setShowActionPanel(false)}>
+          <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby={`${type}-modal-title`} onMouseDown={(event) => event.stopPropagation()}>
+            <ActionPanel
+              type={type}
+              title={content.action}
+              formData={formData}
+              isSaving={isSaving}
+              statusMessage={statusMessage}
+              onChange={updateForm}
+              onClose={() => setShowActionPanel(false)}
+              onSubmit={submitForm}
+            />
+          </div>
+        </div>
       )}
 
       <div className="stats-grid">
@@ -392,10 +396,10 @@ const ModulePage = ({ type }) => {
 };
 
 const ActionPanel = ({ type, title, formData, isSaving, statusMessage, onChange, onClose, onSubmit }) => (
-  <form className="action-panel form-panel" onSubmit={onSubmit}>
+  <form className="form-panel" onSubmit={onSubmit}>
     <div className="form-panel-header">
       <div>
-        <strong>{title}</strong>
+        <strong id={`${type}-modal-title`}>{title}</strong>
         <span>Enter the details below and save the record.</span>
       </div>
       <button type="button" onClick={onClose} aria-label="Close form">

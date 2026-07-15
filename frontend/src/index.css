@@ -194,9 +194,46 @@ button {
   background: #eff6ff;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.48);
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.modal-card {
+  width: min(760px, 100%);
+  max-height: min(86vh, 820px);
+  overflow: auto;
+  border: 1px solid #dbe3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.28);
+  animation: modal-in 180ms ease-out;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .form-panel {
   align-items: stretch;
   flex-direction: column;
+  display: flex;
+  gap: 18px;
+  padding: 20px;
 }
 
 .form-panel-header,
@@ -205,6 +242,43 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.form-panel-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 16px;
+}
+
+.form-panel-header strong {
+  display: block;
+  color: #020617;
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.form-panel-header span {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.form-panel-header button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: #eef2f7;
+  color: #334155;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.form-panel-header button:hover {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .form-grid {
@@ -244,6 +318,8 @@ button {
 }
 
 .form-actions {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
   justify-content: flex-end;
 }
 
