@@ -21,6 +21,7 @@ const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/buildings', label: 'Buildings', icon: Building2 },
   { to: '/departments', label: 'Departments', icon: Users },
+  { to: '/users', label: 'Users', icon: Users },
   { to: '/energy', label: 'Energy Usage', icon: Zap },
   { to: '/ai', label: 'AI Insights', icon: Bot },
   { to: '/reports', label: 'Reports', icon: FileText },

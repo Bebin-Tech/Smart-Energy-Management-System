@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Layout from './components/Layout';
 import ModulePage from './pages/ModulePage';
 import AIInsights from './pages/AIInsights';
+import UsersPage from './pages/UsersPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
@@ -30,6 +31,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="buildings" element={<ModulePage type="buildings" />} />
           <Route path="departments" element={<ModulePage type="departments" />} />
+          <Route path="users" element={<UsersPage />} />
           <Route path="energy" element={<ModulePage type="energy" />} />
           <Route path="ai" element={<AIInsights />} />
           <Route path="reports" element={<ModulePage type="reports" />} />

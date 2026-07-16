@@ -17,6 +17,11 @@ export const authService = {
   register: (userData) => api.post('/auth/register', userData),
 };
 
+export const userService = {
+  getAll: () => api.get('/users'),
+  add: (data) => api.post('/users', data),
+};
+
 export const buildingService = {
   getAll: () => api.get('/buildings'),
   add: (data) => api.post('/buildings', data),

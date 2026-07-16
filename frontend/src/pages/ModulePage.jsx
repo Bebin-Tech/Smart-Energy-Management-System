@@ -428,14 +428,26 @@ const ActionPanel = ({ type, title, formData, isSaving, statusMessage, onChange,
       )}
 
       {type === 'energy' && (
-        <>
-          <Field label="Date" type="date" value={formData.date} onChange={(value) => onChange('date', value)} required />
-          <Field label="Building ID" type="number" value={formData.building_id} onChange={(value) => onChange('building_id', value)} required />
-          <Field label="Department ID" type="number" value={formData.department_id} onChange={(value) => onChange('department_id', value)} />
-          <Field label="Units Consumed" type="number" value={formData.units_consumed} onChange={(value) => onChange('units_consumed', value)} required />
-          <Field label="Peak Demand" type="number" value={formData.peak_demand} onChange={(value) => onChange('peak_demand', value)} />
-          <Field label="Electricity Cost" type="number" value={formData.electricity_cost} onChange={(value) => onChange('electricity_cost', value)} />
-        </>
+        <div className="sequential-form">
+          <StepField number="1">
+            <Field label="Date" type="date" value={formData.date} onChange={(value) => onChange('date', value)} required />
+          </StepField>
+          <StepField number="2">
+            <Field label="Building ID" type="number" value={formData.building_id} onChange={(value) => onChange('building_id', value)} required />
+          </StepField>
+          <StepField number="3">
+            <Field label="Department ID" type="number" value={formData.department_id} onChange={(value) => onChange('department_id', value)} />
+          </StepField>
+          <StepField number="4">
+            <Field label="Units Consumed" type="number" value={formData.units_consumed} onChange={(value) => onChange('units_consumed', value)} required />
+          </StepField>
+          <StepField number="5">
+            <Field label="Peak Demand" type="number" value={formData.peak_demand} onChange={(value) => onChange('peak_demand', value)} />
+          </StepField>
+          <StepField number="6">
+            <Field label="Electricity Cost" type="number" value={formData.electricity_cost} onChange={(value) => onChange('electricity_cost', value)} />
+          </StepField>
+        </div>
       )}
 
       {type === 'settings' && (
@@ -482,6 +494,13 @@ const Field = ({ label, value, onChange, type = 'text', required = false }) => (
       step={type === 'number' ? 'any' : undefined}
     />
   </label>
+);
+
+const StepField = ({ number, children }) => (
+  <div className="step-field">
+    <span className="step-number">{number}</span>
+    {children}
+  </div>
 );
 
 const SelectField = ({ label, value, onChange, options }) => (
