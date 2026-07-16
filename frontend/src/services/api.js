@@ -20,6 +20,9 @@ export const authService = {
 export const userService = {
   getAll: () => api.get('/users'),
   add: (data) => api.post('/users', data),
+  update: (id, data) => api.put(`/users/${id}`, data),
+  resetPassword: (id, data) => api.post(`/users/${id}/reset-password`, data),
+  remove: (id) => api.delete(`/users/${id}`),
 };
 
 export const buildingService = {
