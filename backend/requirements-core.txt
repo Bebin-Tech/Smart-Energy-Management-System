@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+flask-cors
+flask-login
+flask-jwt-extended
+flask-wtf
+pymysql
+cryptography
+python-dotenv
