@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
-  Activity,
   Bot,
   Building2,
   ChevronLeft,
@@ -16,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react';
 import clsx from 'clsx';
+import smartEnergyLogo from '../assets/smartenergy-logo.svg';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -57,9 +57,7 @@ const Layout = ({ onLogout }) => {
         )}
       >
         <div className="flex h-20 items-center gap-3 px-5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded bg-blue-600 text-white shadow-lg shadow-blue-600/20">
-            <Activity className="h-6 w-6" />
-          </div>
+          <img className="app-logo" src={smartEnergyLogo} alt="SmartEnergy logo" />
           <div className={clsx('min-w-0 transition-all duration-200', isCollapsed && 'lg:pointer-events-none lg:w-0 lg:opacity-0')}>
             <h1 className="truncate text-xl font-bold text-slate-950">SmartEnergy</h1>
             <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500">Management System</p>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Lock, User } from 'lucide-react';
 import { authService } from '../services/api';
+import smartEnergyLogo from '../assets/smartenergy-logo.svg';
 
 const DEMO_USERNAME = 'admin';
 const DEMO_PASSWORD = 'admin123';
@@ -44,6 +45,7 @@ const Login = ({ onLoginSuccess }) => {
       <section className="login-shell">
         <div className="login-card">
           <div className="login-card-header">
+            <img className="login-logo" src={smartEnergyLogo} alt="SmartEnergy logo" />
             <h2>Smart Energy Management System</h2>
           </div>
 
