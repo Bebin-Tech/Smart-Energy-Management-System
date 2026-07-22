@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, ArrowRight, Lock, ShieldCheck, User, Zap } from 'lucide-react';
+import { Activity, ArrowRight, Lock, User } from 'lucide-react';
 import { authService } from '../services/api';
 
 const DEMO_USERNAME = 'admin';
@@ -47,22 +47,7 @@ const Login = ({ onLoginSuccess }) => {
             <Activity size={30} />
           </div>
           <div>
-            <span className="eyebrow">Smart campus operations</span>
             <h1>SmartEnergy Management System</h1>
-            <p>
-              Monitor usage, manage energy records, and review AI-powered insights from a secure dashboard.
-            </p>
-          </div>
-
-          <div className="login-highlights">
-            <div>
-              <Zap size={20} />
-              <span>Live energy tracking</span>
-            </div>
-            <div>
-              <ShieldCheck size={20} />
-              <span>Role-based access</span>
-            </div>
           </div>
         </div>
 
@@ -70,7 +55,6 @@ const Login = ({ onLoginSuccess }) => {
           <div className="login-card-header">
             <span>Welcome back</span>
             <h2>Sign in to continue</h2>
-            <p>Use your assigned account or the demo admin credentials.</p>
           </div>
 
           <form onSubmit={handleLogin} className="login-form">
@@ -111,12 +95,6 @@ const Login = ({ onLoginSuccess }) => {
               <ArrowRight size={18} />
             </button>
           </form>
-
-          <div className="login-demo-box">
-            <strong>Demo Access</strong>
-            <span>Username: admin</span>
-            <span>Password: admin123</span>
-          </div>
         </div>
       </section>
     </main>
