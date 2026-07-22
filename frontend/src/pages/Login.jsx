@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Activity, ArrowRight, Lock, ShieldCheck, User, Zap } from 'lucide-react';
 import { authService } from '../services/api';
 
 const DEMO_USERNAME = 'admin';
@@ -39,55 +40,86 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center text-blue-600 mb-8">Smart Energy System</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              Username
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              id="username"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+    <main className="login-page">
+      <section className="login-shell">
+        <div className="login-brand-panel">
+          <div className="login-brand-mark">
+            <Activity size={30} />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              id="password"
-              type="password"
-              placeholder="******************"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && (
-            <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
+          <div>
+            <span className="eyebrow">Smart campus operations</span>
+            <h1>SmartEnergy Management System</h1>
+            <p>
+              Monitor usage, manage energy records, and review AI-powered insights from a secure dashboard.
             </p>
-          )}
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-300"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Signing in...' : 'Sign In'}
-            </button>
           </div>
-        </form>
-      </div>
-    </div>
+
+          <div className="login-highlights">
+            <div>
+              <Zap size={20} />
+              <span>Live energy tracking</span>
+            </div>
+            <div>
+              <ShieldCheck size={20} />
+              <span>Role-based access</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="login-card">
+          <div className="login-card-header">
+            <span>Welcome back</span>
+            <h2>Sign in to continue</h2>
+            <p>Use your assigned account or the demo admin credentials.</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="login-form">
+            <label className="login-field" htmlFor="username">
+              <span>Username</span>
+              <div>
+                <User size={18} />
+                <input
+                  id="username"
+                  type="text"
+                  placeholder="admin"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+            </label>
+
+            <label className="login-field" htmlFor="password">
+              <span>Password</span>
+              <div>
+                <Lock size={18} />
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="admin123"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+            </label>
+
+            {error && <p className="login-error">{error}</p>}
+
+            <button className="login-submit" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
+              <ArrowRight size={18} />
+            </button>
+          </form>
+
+          <div className="login-demo-box">
+            <strong>Demo Access</strong>
+            <span>Username: admin</span>
+            <span>Password: admin123</span>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 
