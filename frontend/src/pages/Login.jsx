@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, ArrowRight, Lock, User } from 'lucide-react';
+import { ArrowRight, Lock, User } from 'lucide-react';
 import { authService } from '../services/api';
 
 const DEMO_USERNAME = 'admin';
@@ -42,19 +42,9 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <main className="login-page">
       <section className="login-shell">
-        <div className="login-brand-panel">
-          <div className="login-brand-mark">
-            <Activity size={30} />
-          </div>
-          <div>
-            <h1>SmartEnergy Management System</h1>
-          </div>
-        </div>
-
         <div className="login-card">
           <div className="login-card-header">
-            <span>Welcome back</span>
-            <h2>Sign in to continue</h2>
+            <h2>Smart Energy Management System</h2>
           </div>
 
           <form onSubmit={handleLogin} className="login-form">
