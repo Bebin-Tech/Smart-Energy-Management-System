@@ -53,7 +53,7 @@ const Layout = ({ onLogout }) => {
           'fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 bg-white/95 shadow-xl shadow-slate-200/80 backdrop-blur transition-all duration-300 ease-out',
           isCollapsed ? 'lg:w-20' : 'lg:w-72',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-          'w-72'
+          'w-72 overflow-hidden'
         )}
       >
         <div className="flex h-20 items-center gap-3 px-5">
@@ -72,7 +72,7 @@ const Layout = ({ onLogout }) => {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3">
+        <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto px-3 pb-3">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -115,7 +115,7 @@ const Layout = ({ onLogout }) => {
         </div>
       </aside>
 
-      <div className={clsx('min-h-screen transition-all duration-300', isCollapsed ? 'lg:pl-20' : 'lg:pl-72')}>
+      <div className={clsx('min-h-screen min-w-0 transition-all duration-300', isCollapsed ? 'lg:pl-20' : 'lg:pl-72')}>
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/85 px-4 backdrop-blur lg:hidden">
           <button
             type="button"
@@ -129,7 +129,7 @@ const Layout = ({ onLogout }) => {
           <div className="h-10 w-10" />
         </header>
 
-        <main className="mx-auto min-h-screen w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+        <main className="mx-auto min-h-screen w-full max-w-screen-2xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
           <Outlet />
         </main>
       </div>

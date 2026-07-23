@@ -18,7 +18,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #eef2f7;
+  background: #f1f5f9;
   color: #0f172a;
 }
 
@@ -38,6 +38,10 @@ select {
 
 button {
   cursor: pointer;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 .login-page {
@@ -81,7 +85,7 @@ button {
 .login-card-header h2 {
   margin: 14px 0 0;
   color: #020617;
-  font-size: 2rem;
+  font-size: clamp(1.55rem, 6vw, 2rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 1.12;
@@ -175,22 +179,6 @@ button {
   transform: none;
 }
 
-.login-demo-box {
-  display: grid;
-  gap: 4px;
-  margin-top: 20px;
-  border: 1px solid #dbe3ee;
-  border-radius: 8px;
-  background: #f8fafc;
-  padding: 14px;
-  color: #475569;
-  font-size: 0.86rem;
-}
-
-.login-demo-box strong {
-  color: #0f172a;
-}
-
 .login-logo {
   display: block;
   width: 78px;
@@ -209,7 +197,9 @@ button {
 .module-page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 26px;
+  min-width: 0;
+  color: #0f172a;
 }
 
 .module-hero {
@@ -220,7 +210,7 @@ button {
   border: 1px solid #dbe3ee;
   border-radius: 8px;
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-  padding: 24px;
+  padding: clamp(18px, 2.4vw, 28px);
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
 }
 
@@ -253,8 +243,8 @@ button {
 .module-hero h2 {
   margin: 0;
   color: #020617;
-  font-size: clamp(1.55rem, 3vw, 2.2rem);
-  font-weight: 800;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 900;
   line-height: 1.1;
   letter-spacing: 0;
 }
@@ -263,7 +253,7 @@ button {
   margin: 8px 0 0;
   max-width: 720px;
   color: #475569;
-  font-size: 0.98rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -334,7 +324,7 @@ button {
   border-radius: 8px;
   background: #ffffff;
   padding: 12px 14px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
 }
 
 .filter-bar input {
@@ -373,7 +363,7 @@ button {
 
 .modal-card {
   width: min(760px, 100%);
-  max-height: min(86vh, 820px);
+  max-height: min(90vh, 860px);
   overflow: auto;
   border: 1px solid #dbe3ee;
   border-radius: 8px;
@@ -399,7 +389,7 @@ button {
   flex-direction: column;
   display: flex;
   gap: 18px;
-  padding: 20px;
+  padding: clamp(18px, 2.2vw, 24px);
 }
 
 .form-panel-header,
@@ -449,7 +439,7 @@ button {
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -459,15 +449,15 @@ button {
 }
 
 .form-field span {
-  color: #475569;
-  font-size: 0.78rem;
+  color: #334155;
+  font-size: 0.8rem;
   font-weight: 850;
   text-transform: uppercase;
 }
 
 .form-field input,
 .form-field select {
-  height: 42px;
+  height: 46px;
   width: 100%;
   border: 1px solid #dbe3ee;
   border-radius: 8px;
@@ -542,7 +532,7 @@ button {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .dashboard-stats {
@@ -555,23 +545,23 @@ button {
   border: 1px solid #dbe3ee;
   border-radius: 8px;
   background: #ffffff;
-  padding: 20px;
+  padding: 22px;
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.05);
 }
 
 .metric-card span {
   display: block;
-  color: #64748b;
-  font-size: 0.88rem;
-  font-weight: 700;
+  color: #475569;
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 .metric-card strong {
   display: block;
   margin-top: 10px;
   color: #020617;
-  font-size: 1.75rem;
-  font-weight: 850;
+  font-size: clamp(1.55rem, 3vw, 1.9rem);
+  font-weight: 900;
   line-height: 1.1;
 }
 
@@ -622,13 +612,15 @@ button {
 
 .module-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
   gap: 20px;
   align-items: start;
+  min-width: 0;
 }
 
 .panel {
   overflow: hidden;
+  min-width: 0;
   border: 1px solid #dbe3ee;
   border-radius: 8px;
   background: #ffffff;
@@ -641,7 +633,7 @@ button {
   justify-content: space-between;
   gap: 16px;
   border-bottom: 1px solid #e2e8f0;
-  padding: 18px 20px;
+  padding: 20px 22px;
 }
 
 .panel-header.compact {
@@ -651,14 +643,14 @@ button {
 .panel-header h3 {
   margin: 0;
   color: #020617;
-  font-size: 1rem;
-  font-weight: 850;
+  font-size: 1.08rem;
+  font-weight: 900;
 }
 
 .panel-header p {
   margin: 4px 0 0;
-  color: #64748b;
-  font-size: 0.84rem;
+  color: #475569;
+  font-size: 0.9rem;
 }
 
 .live-pill,
@@ -686,15 +678,15 @@ button {
 
 .responsive-table table {
   width: 100%;
-  min-width: 620px;
+  min-width: 720px;
   border-collapse: collapse;
 }
 
 .responsive-table th {
   background: #f8fafc;
-  color: #64748b;
-  font-size: 0.74rem;
-  font-weight: 850;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 900;
   letter-spacing: 0;
   padding: 13px 20px;
   text-align: left;
@@ -704,8 +696,8 @@ button {
 .responsive-table td {
   border-top: 1px solid #eef2f7;
   color: #334155;
-  font-size: 0.92rem;
-  font-weight: 650;
+  font-size: 0.95rem;
+  font-weight: 700;
   padding: 16px 20px;
   white-space: nowrap;
 }
@@ -790,13 +782,13 @@ button {
 .recommendation-list span {
   display: block;
   margin-top: 3px;
-  color: #64748b;
-  font-size: 0.82rem;
+  color: #475569;
+  font-size: 0.86rem;
   line-height: 1.45;
 }
 
 .chart-wrap {
-  height: 360px;
+  height: clamp(300px, 34vw, 390px);
   padding: 20px;
 }
 
@@ -835,9 +827,10 @@ button {
 
 .ai-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
   gap: 20px;
   align-items: start;
+  min-width: 0;
 }
 
 .ai-chart-wrap {
@@ -920,9 +913,9 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #334155;
-  font-size: 0.88rem;
-  font-weight: 650;
+  color: #1e293b;
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .role-card li svg {
@@ -1036,13 +1029,13 @@ button {
   }
 
   .login-card {
-    padding: 28px;
+    padding: 30px 22px;
   }
 
   .module-hero {
     align-items: stretch;
     flex-direction: column;
-    padding: 18px;
+    padding: 20px;
   }
 
   .module-title-group {
@@ -1083,7 +1076,7 @@ button {
   }
 
   .chart-wrap {
-    height: 280px;
+    height: 300px;
   }
 
   .ai-controls {
@@ -1105,6 +1098,15 @@ button {
 }
 
 @media (max-width: 520px) {
+  .login-shell {
+    width: 100%;
+  }
+
+  .login-logo {
+    width: 66px;
+    height: 66px;
+  }
+
   .module-title-group {
     flex-direction: column;
   }
@@ -1120,5 +1122,9 @@ button {
 
   .ai-controls {
     flex-direction: column;
+  }
+
+  .responsive-table table {
+    min-width: 640px;
   }
 }
