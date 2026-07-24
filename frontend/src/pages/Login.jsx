@@ -54,15 +54,18 @@ const Login = ({ onLoginSuccess }) => {
     setError('');
     setIsSubmitting(true);
 
+    const normalizedUsername = username.trim();
+
     try {
-      const response = await authService.login({ username, password });
+      const response = await authService.login({ username: normalizedUsername, password });
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('username', response.data.username);
+      localStorage.setItem('role', response.data.role || 'User');
       onLoginSuccess();
       navigate('/');
     } catch (err) {
       const localUser = getLocalUsers().find(
-        (user) => user.username === username && user.password === password && user.status !== 'Inactive'
+        (user) => user.username === normalizedUsername && user.password === password && user.status !== 'Inactive'
       );
 
       if (localUser) {
@@ -97,7 +100,7 @@ const Login = ({ onLoginSuccess }) => {
                 <input
                   id="username"
                   type="text"
-                  placeholder="admin"
+                  placeholder="Enter username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -112,7 +115,7 @@ const Login = ({ onLoginSuccess }) => {
                 <input
                   id="password"
                   type="password"
-                  placeholder="admin123"
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
