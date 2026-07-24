@@ -37,10 +37,11 @@ const rolePermissions = {
 };
 
 const initialUsers = [
-  { id: 1, username: 'admin', email: 'admin@example.com', role: 'Admin', status: 'Active' },
-  { id: 2, username: 'manager', email: 'manager@example.com', role: 'Manager', status: 'Active' },
-  { id: 3, username: 'viewer', email: 'viewer@example.com', role: 'User', status: 'Active' },
+  { id: 1, username: 'admin', email: 'admin@example.com', password: 'admin123', role: 'Admin', status: 'Active' },
+  { id: 2, username: 'manager', email: 'manager@example.com', password: 'manager123', role: 'Manager', status: 'Active' },
+  { id: 3, username: 'viewer', email: 'viewer@example.com', password: 'user123', role: 'User', status: 'Active' },
 ];
+const LOCAL_USERS_KEY = 'smartEnergyUsers';
 
 const emptyForm = {
   username: '',
@@ -50,7 +51,7 @@ const emptyForm = {
 };
 
 const UsersPage = () => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState(() => loadLocalUsers());
   const [query, setQuery] = useState('');
   const [modalMode, setModalMode] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -99,6 +100,11 @@ const UsersPage = () => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
+  const saveUsers = (nextUsers) => {
+    setUsers(nextUsers);
+    localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(nextUsers));
+  };
+
   const submitUser = async (event) => {
     event.preventDefault();
     setIsSaving(true);
@@ -111,9 +117,9 @@ const UsersPage = () => {
         } catch (apiError) {
           console.info('User saved locally because API is unavailable.', apiError);
         }
-        setUsers((current) => [
-          { id: Date.now(), username: formData.username, email: formData.email, role: formData.role, status: 'Active' },
-          ...current,
+        saveUsers([
+          { id: Date.now(), username: formData.username, email: formData.email, password: formData.password, role: formData.role, status: 'Active' },
+          ...users,
         ]);
         setFormData(emptyForm);
         setStatusMessage('User created successfully.');
@@ -135,7 +141,7 @@ const UsersPage = () => {
         } catch (apiError) {
           console.info('User updated locally because API is unavailable.', apiError);
         }
-        setUsers((current) => current.map((user) => (user.id === selectedUser.id ? updatedUser : user)));
+        saveUsers(users.map((user) => (user.id === selectedUser.id ? updatedUser : user)));
         setSelectedUser(updatedUser);
         setStatusMessage('User details updated successfully.');
       }
@@ -146,6 +152,9 @@ const UsersPage = () => {
         } catch (apiError) {
           console.info('Password reset locally because API is unavailable.', apiError);
         }
+        saveUsers(users.map((user) => (
+          user.id === selectedUser.id ? { ...user, password: formData.password } : user
+        )));
         setStatusMessage(`Password reset for ${selectedUser.username}.`);
         setFormData((current) => ({ ...current, password: '' }));
       }
@@ -163,7 +172,7 @@ const UsersPage = () => {
     } catch (apiError) {
       console.info('User deleted locally because API is unavailable.', apiError);
     }
-    setUsers((current) => current.filter((user) => user.id !== userToDelete.id));
+    saveUsers(users.filter((user) => user.id !== userToDelete.id));
   };
 
   return (
@@ -350,6 +359,34 @@ const modalTitle = (mode, user) => {
   if (mode === 'edit') return `Edit ${user?.username || 'User'}`;
   if (mode === 'reset') return `Reset Password`;
   return 'Create User';
+};
+
+const loadLocalUsers = () => {
+  try {
+    const storedUsers = JSON.parse(localStorage.getItem(LOCAL_USERS_KEY));
+    if (Array.isArray(storedUsers) && storedUsers.length > 0) {
+      const normalizedUsers = normalizeLocalUsers(storedUsers);
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(normalizedUsers));
+      return normalizedUsers;
+    }
+  } catch (error) {
+    console.info('Unable to read local users.', error);
+  }
+
+  localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(initialUsers));
+  return initialUsers;
+};
+
+const normalizeLocalUsers = (users) => {
+  return users.map((user) => {
+    const defaultUser = initialUsers.find((item) => item.username === user.username);
+    return {
+      status: 'Active',
+      ...user,
+      password: user.password || defaultUser?.password || '',
+      role: user.role || defaultUser?.role || 'User',
+    };
+  });
 };
 
 const modalDescription = (mode) => {

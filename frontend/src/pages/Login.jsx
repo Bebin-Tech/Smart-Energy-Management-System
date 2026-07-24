@@ -6,6 +6,41 @@ import smartEnergyLogo from '../assets/smartenergy-logo.svg';
 
 const DEMO_USERNAME = 'admin';
 const DEMO_PASSWORD = 'admin123';
+const LOCAL_USERS_KEY = 'smartEnergyUsers';
+
+const defaultLocalUsers = [
+  { id: 1, username: DEMO_USERNAME, email: 'admin@example.com', password: DEMO_PASSWORD, role: 'Admin', status: 'Active' },
+  { id: 2, username: 'manager', email: 'manager@example.com', password: 'manager123', role: 'Manager', status: 'Active' },
+  { id: 3, username: 'viewer', email: 'viewer@example.com', password: 'user123', role: 'User', status: 'Active' },
+];
+
+const getLocalUsers = () => {
+  try {
+    const storedUsers = JSON.parse(localStorage.getItem(LOCAL_USERS_KEY));
+    if (Array.isArray(storedUsers) && storedUsers.length > 0) {
+      const normalizedUsers = normalizeLocalUsers(storedUsers);
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(normalizedUsers));
+      return normalizedUsers;
+    }
+  } catch (error) {
+    console.info('Unable to read local users.', error);
+  }
+
+  localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(defaultLocalUsers));
+  return defaultLocalUsers;
+};
+
+const normalizeLocalUsers = (users) => {
+  return users.map((user) => {
+    const defaultUser = defaultLocalUsers.find((item) => item.username === user.username);
+    return {
+      status: 'Active',
+      ...user,
+      password: user.password || defaultUser?.password || '',
+      role: user.role || defaultUser?.role || 'User',
+    };
+  });
+};
 
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -26,9 +61,14 @@ const Login = ({ onLoginSuccess }) => {
       onLoginSuccess();
       navigate('/');
     } catch (err) {
-      if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-        localStorage.setItem('token', 'demo-token');
-        localStorage.setItem('username', DEMO_USERNAME);
+      const localUser = getLocalUsers().find(
+        (user) => user.username === username && user.password === password && user.status !== 'Inactive'
+      );
+
+      if (localUser) {
+        localStorage.setItem('token', `local-token-${localUser.id}`);
+        localStorage.setItem('username', localUser.username);
+        localStorage.setItem('role', localUser.role);
         onLoginSuccess();
         navigate('/');
         return;
